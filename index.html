@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ecuaciones con Ángulos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: hoja cuadriculada; cada ejercicio es una tarjeta con enunciado, planteo gráfico, resolución numérica y resolución gráfica */
+:root{
+  --paper:#fbfcff; --grid:rgba(40,70,170,.09); --ink:#1c2c74; --ink-soft:#4d5a92; --text:#1d2238;
+  --margin:#d8435a; --card:#ffffff; --line:#d5dbef;
+  --c1:#2f5bea; --c1-fill:rgba(47,91,234,.18);
+  --c2:#e08a00; --c2-fill:rgba(224,138,0,.20);
+  --c3:#0f8a7e; --c3-fill:rgba(15,138,126,.18);
+  --ok:#11845b; --hl:#fff1c7;
+  --f-display:"Bricolage Grotesque",ui-rounded,system-ui,sans-serif;
+  --f-body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0f1428; --grid:rgba(140,170,255,.07); --ink:#bcc9ff; --ink-soft:#8e9acb; --text:#e3e7f7;
+  --margin:#ff6b81; --card:#161c36; --line:#2a3360;
+  --c1:#7e9bff; --c1-fill:rgba(126,155,255,.22); --c2:#ffb340; --c2-fill:rgba(255,179,64,.22);
+  --c3:#39c9b8; --c3-fill:rgba(57,201,184,.20); --ok:#4fd39a; --hl:#3a3418; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0f1428; --grid:rgba(140,170,255,.07); --ink:#bcc9ff; --ink-soft:#8e9acb; --text:#e3e7f7;
+  --margin:#ff6b81; --card:#161c36; --line:#2a3360;
+  --c1:#7e9bff; --c1-fill:rgba(126,155,255,.22); --c2:#ffb340; --c2-fill:rgba(255,179,64,.22);
+  --c3:#39c9b8; --c3-fill:rgba(57,201,184,.20); --ok:#4fd39a; --hl:#3a3418; color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background-color:var(--paper);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+[hidden]{display:none!important}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px;display:grid;gap:26px}
+h1,h2,h3{font-family:var(--f-display);color:var(--ink);margin:0;line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.3rem,3.4vw,1.75rem)}
+h3{font-size:1rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft)}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--margin);font-weight:700}
+.top{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:end}
+.top p{color:var(--ink-soft);margin-top:8px}
+button{font:inherit;font-weight:700;font-size:.9rem;cursor:pointer;border-radius:999px;padding:7px 15px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink)}
+button:hover{background:var(--ink);color:var(--paper)}
+button:focus-visible{outline:3px solid var(--c2);outline-offset:2px}
+button.on{background:var(--ink);color:var(--paper)}
+.method{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.method div{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-size:.92rem}
+.method b{display:block;font-family:var(--f-display);color:var(--ink)}
+.ex{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:16px}
+.ex-head{display:flex;gap:14px;align-items:flex-start}
+.num{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--ink);color:var(--paper);font-family:var(--f-display);font-weight:800;font-size:1.4rem}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:.75rem;font-weight:700;color:var(--margin);letter-spacing:.08em;text-transform:uppercase}
+.stmt{font-size:1.05rem;margin-top:4px}
+.expr{font-family:var(--f-mono);font-weight:700;color:var(--ink);background:var(--hl);padding:0 5px;border-radius:5px;white-space:nowrap}
+.grid3{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:start}.figs{display:grid;gap:14px}
+.grid3>*{min-width:0}
+.panel{display:grid;gap:8px}
+.fig{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:6px}
+.fig svg{display:block;width:100%;height:auto}
+.steps{display:grid;gap:6px;font-family:var(--f-mono);font-size:.93rem;font-variant-numeric:tabular-nums}
+.steps div{padding:6px 10px;border-radius:8px;background:var(--paper);border:1px solid var(--line);overflow-x:auto}
+.steps .why{font-family:var(--f-body);font-size:.88rem;color:var(--ink-soft);background:none;border:none;padding:2px 2px 0}
+.steps .ans{background:var(--hl);color:var(--ink);font-weight:700;border-color:transparent}
+.steps .chk{color:var(--ok);font-weight:700}
+.steps div.dim{opacity:.15}
+.stepctl{display:flex;flex-wrap:wrap;gap:8px}
+.cover{display:grid;place-items:center;min-height:160px;border:2px dashed var(--line);border-radius:12px;color:var(--ink-soft);text-align:center;padding:12px}
+.svgtxt{font-family:var(--f-mono);font-weight:700;font-size:17px}
+.new .dw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1s ease forwards}
+.new .fade{animation:fadein .7s ease .5s both}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+footer{color:var(--ink-soft);font-size:.88rem}
+@media (max-width:860px){.method{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.grid3{grid-template-columns:1fr}}@media (max-width:560px){.method{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.new .dw{stroke-dasharray:none;stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Matemática · 1.º año · Unidad 4</div>
+      <h1>Ecuaciones con ángulos</h1>
+      <p>Cinco ejercicios resueltos de dos maneras: con la cuenta paso a paso y con el dibujo. Primero intentá resolverlos solo y después comparás.</p>
+    </div>
+    <button id="practice">Modo práctica: ocultar soluciones</button>
+  </header>
+
+  <div class="method">
+    <div><b>1. Mirar el dibujo</b>¿Qué relación tienen los ángulos?</div>
+    <div><b>2. Plantear</b>Si suman 90° o 180°, sumarlos. Si son iguales, igualarlos.</div>
+    <div><b>3. Despejar x</b>Las x de un lado y los números del otro.</div>
+    <div><b>4. Reemplazar y verificar</b>Calcular cada ángulo y comprobar.</div>
+  </div>
+
+  <div id="exs" style="display:grid;gap:22px"></div>
+
+  <footer>Tocá <b>Paso a paso</b> para ver la cuenta de a una línea, o <b>Repetir dibujo</b> para volver a ver la animación.</footer>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const R=Math.PI/180,f1=n=>(+n).toFixed(1),norm=d=>((d%360)+360)%360;
+const P=(O,r,d)=>[O[0]+r*Math.cos(d*R),O[1]-r*Math.sin(d*R)];
+function sector(O,r,a1,a2){const s=norm(a2-a1);const p=P(O,r,a1),q=P(O,r,a2);return `M${f1(O[0])} ${f1(O[1])} L${f1(p[0])} ${f1(p[1])} A${r} ${r} 0 ${s>180?1:0} 0 ${f1(q[0])} ${f1(q[1])} Z`}
+const L=(p,q,c='var(--ink)',w=2.6,dash)=>`<line ${dash?'class="fade" stroke-dasharray="6 5"':'class="dw" pathLength="1"'} x1="${f1(p[0])}" y1="${f1(p[1])}" x2="${f1(q[0])}" y2="${f1(q[1])}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+const SC=(O,r,a1,a2,c)=>`<path class="fade" d="${sector(O,r,a1,a2)}" fill="var(--${c}-fill)" stroke="var(--${c})" stroke-width="2"/>`;
+const T=(O,r,m,t,c='var(--ink)',size=17)=>{const[x,y]=P(O,r,m);return `<text class="svgtxt fade" style="font-size:${size}px" x="${f1(x)}" y="${f1(y)}" fill="${c}" text-anchor="middle" dominant-baseline="middle">${t}</text>`};
+const TX=(x,y,t,c='var(--ink)',size=17)=>`<text class="svgtxt fade" style="font-size:${size}px" x="${x}" y="${y}" fill="${c}" text-anchor="middle" dominant-baseline="middle">${t}</text>`;
+const D=(p)=>`<circle class="fade" cx="${f1(p[0])}" cy="${f1(p[1])}" r="4" fill="var(--margin)"/>`;
+const SQ=(O,a,s=13)=>{const p=P(O,s,a),c=P(O,s*Math.SQRT2,a+45),q=P(O,s,a+90);return `<polyline class="fade" points="${f1(p[0])},${f1(p[1])} ${f1(c[0])},${f1(c[1])} ${f1(q[0])},${f1(q[1])}" fill="none" stroke="var(--ink)" stroke-width="1.6"/>`};
+const deg=(a,b)=>norm(Math.atan2(-(b[1]-a[1]),b[0]-a[0])/R);
+
+/* ---------- Figuras: s=false -> planteo con expresiones; s=true -> solución con valores ---------- */
+const FIG=[
+ s=>{const O=[200,180];let g=L([20,180],[380,180])+L(O,P(O,170,120))+SC(O,46,0,120,'c1')+SC(O,38,120,180,'c2')+D(O);
+   g+=T(O,92,55,s?'120°':'3x + 15°','var(--c1)')+T(O,95,158,s?'60°':'2x − 10°','var(--c2)');
+   if(s)g+=TX(200,212,'120° + 60° = 180°','var(--ok)',16);return g},
+ s=>{const O=[200,118],t=130;let g=L(P(O,180,0),P(O,180,180))+L(P(O,170,t),P(O,170,t+180));
+   g+=SC(O,38,0,t,'c1')+SC(O,38,180,180+t,'c1');if(s)g+=SC(O,28,t,180,'c2')+SC(O,28,180+t,360,'c2');g+=D(O);
+   g+=T(O,88,48,s?'130°':'6x − 20°','var(--c1)')+T(O,88,228,s?'130°':'4x + 30°','var(--c1)');
+   g+=T(O,60,157,s?'50°':'?','var(--c2)')+T(O,60,337,s?'50°':'?','var(--c2)');return g},
+ s=>{const O=[60,215];let g=L(O,[380,215])+L(O,[60,25])+L(O,P(O,260,32))+SC(O,90,0,32,'c1')+SC(O,74,32,90,'c2')+SQ(O,0)+D(O);
+   g+=T(O,150,14,s?'32°':'x + 12°','var(--c1)')+T(O,118,64,s?'58°':'3x − 2°','var(--c2)');
+   if(s)g+=TX(280,40,'32° + 58° = 90°','var(--ok)',16);return g},
+ s=>{const A=[50,225],B=[230,225],AC=180*Math.sin(85*R)/Math.sin(45*R),C=P(A,AC,50);
+   let g=`<polygon class="fade" points="${A} ${B} ${f1(C[0])},${f1(C[1])}" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linejoin="round"/>`;
+   g+=L(A,B)+L(B,C)+L(A,C)+L(B,[385,225],'var(--ink-soft)',2,true);
+   g+=SC(A,36,0,50,'c1')+SC(B,30,deg(B,C),180,'c2')+SC(C,30,deg(C,A),deg(C,B),'c3')+`<path class="dw" pathLength="1" d="M${B[0]+44} ${B[1]} A44 44 0 0 0 ${f1(P(B,44,deg(B,C))[0])} ${f1(P(B,44,deg(B,C))[1])}" fill="none" stroke="var(--margin)" stroke-width="2.6"/>`;
+   g+=T(A,64,25,s?'50°':'2x','var(--c1)')+T(B,62,(deg(B,C)+180)/2+8,s?'85°':'3x+10°','var(--c2)',15)+T(C,68,(deg(C,A)+deg(C,B))/2,s?'45°':'x+20°','var(--c3)',15)+T(B,80,deg(B,C)/2,s?'95°':'ext.','var(--margin)');
+   g+=TX(A[0]-12,A[1]+16,'A','var(--ink)',15)+TX(B[0],B[1]+18,'B','var(--ink)',15)+TX(C[0]+14,C[1]-6,'C','var(--ink)',15);
+   if(s)g+=TX(345,110,'50°+85°+45°','var(--ok)',15)+TX(345,132,'= 180°','var(--ok)',15);return g},
+ s=>{const y1=85,y2=185,t=85,cx=200,cy=135,tn=Math.tan(t*R),X=y=>cx+(cy-y)/tn,O1=[X(y1),y1],O2=[X(y2),y2];
+   let g=L([20,y1],[380,y1])+L([20,y2],[380,y2])+L([X(12),12],[X(258),258],'var(--margin)');
+   g+=SC(O1,30,180,180+t,'c1')+SC(O2,30,0,t,'c1')+SC(O2,22,t,180,'c2')+D(O1)+D(O2);
+   g+=T(O1,72,205,s?'85°':'5x − 15°','var(--c1)')+T(O2,72,30,s?'85°':'3x + 25°','var(--c1)')+T(O2,56,128,s?'95°':'?','var(--c2)');
+   g+=TX(385,y1-12,'r')+TX(385,y2-12,'s')+TX(X(18)+12,22,'t','var(--margin)');
+   if(s)g+=TX(310,234,'85° + 95° = 180°','var(--ok)',16);return g}
+];
+
+const EX=[
+ {tag:'Ángulos adyacentes',st:'Dos ángulos adyacentes miden <span class="expr">3x + 15°</span> y <span class="expr">2x − 10°</span>. Hallá x y la medida de cada ángulo.',vb:'0 0 400 230',
+  steps:[['why','Los adyacentes forman un ángulo llano: suman 180°.'],['','(3x + 15) + (2x − 10) = 180'],['why','Junto las x y los números.'],['','5x + 5 = 180'],['','5x = 180 − 5'],['','5x = 175'],['','x = 175 : 5'],['ans','x = 35'],['why','Reemplazo x en cada expresión.'],['','3·35 + 15 = 105 + 15 = 120°'],['','2·35 − 10 = 70 − 10 = 60°'],['chk','✔ 120° + 60° = 180°']]},
+ {tag:'Opuestos por el vértice',st:'Dos rectas se cortan. Dos ángulos opuestos por el vértice miden <span class="expr">6x − 20°</span> y <span class="expr">4x + 30°</span>. Hallá x, esos ángulos y los otros dos.',vb:'0 0 400 240',
+  steps:[['why','Los opuestos por el vértice son iguales.'],['','6x − 20 = 4x + 30'],['why','Paso 4x restando y −20 sumando.'],['','6x − 4x = 30 + 20'],['','2x = 50'],['ans','x = 25'],['','6·25 − 20 = 150 − 20 = 130°'],['','4·25 + 30 = 100 + 30 = 130° ✔'],['why','Los otros dos son adyacentes a estos.'],['ans','180° − 130° = 50° cada uno']]},
+ {tag:'Ángulos complementarios',st:'Dos ángulos complementarios miden <span class="expr">x + 12°</span> y <span class="expr">3x − 2°</span>. Hallá x y cada ángulo.',vb:'0 0 400 235',
+  steps:[['why','Los complementarios suman 90°.'],['','(x + 12) + (3x − 2) = 90'],['','4x + 10 = 90'],['','4x = 90 − 10'],['','4x = 80'],['ans','x = 20'],['','20 + 12 = 32°'],['','3·20 − 2 = 60 − 2 = 58°'],['chk','✔ 32° + 58° = 90°']]},
+ {tag:'Ángulos interiores y exterior',st:'Los ángulos de un triángulo miden <span class="expr">2x</span>, <span class="expr">3x + 10°</span> y <span class="expr">x + 20°</span>. Hallá x, cada ángulo y el exterior junto al ángulo mayor.',vb:'0 0 400 260',
+  steps:[['why','Los ángulos interiores de un triángulo suman 180°.'],['','2x + (3x + 10) + (x + 20) = 180'],['','6x + 30 = 180'],['','6x = 150'],['ans','x = 25'],['','Â = 2·25 = 50°'],['','B̂ = 3·25 + 10 = 85°'],['','Ĉ = 25 + 20 = 45°'],['chk','✔ 50° + 85° + 45° = 180°'],['why','El exterior es adyacente al de 85°.'],['ans','exterior = 180° − 85° = 95°'],['chk','✔ También 50° + 45° = 95°']]},
+ {tag:'Paralelas y transversal',st:'Dos paralelas r y s son cortadas por una transversal t. Dos ángulos alternos internos miden <span class="expr">5x − 15°</span> y <span class="expr">3x + 25°</span>. Hallá x, esos ángulos y su conjugado interno.',vb:'0 0 400 250',
+  steps:[['why','Los alternos internos son iguales.'],['','5x − 15 = 3x + 25'],['','5x − 3x = 25 + 15'],['','2x = 40'],['ans','x = 20'],['','5·20 − 15 = 100 − 15 = 85°'],['','3·20 + 25 = 60 + 25 = 85° ✔'],['why','El conjugado interno suma 180° con él.'],['ans','conjugado = 180° − 85° = 95°']]}
+];
+
+const box=$('#exs');
+box.innerHTML=EX.map((e,i)=>`<article class="ex" id="ex${i}">
+ <div class="ex-head"><div class="num">${i+1}</div><div><span class="tag">${e.tag}</span><p class="stmt">${e.st}</p></div></div>
+ <div class="grid3">
+  <div class="figs">
+   <div class="panel"><h3>Planteo gráfico</h3><div class="fig"><svg viewBox="${e.vb}" class="q"></svg></div></div>
+   <div class="panel"><h3>Resolución gráfica</h3><div class="fig sol"><svg viewBox="${e.vb}" class="s"></svg></div><div class="cover" hidden>El dibujo con los valores aparece al mostrar la solución.</div>
+    <div class="stepctl sol"><button class="rep">Repetir dibujo</button></div></div>
+  </div>
+  <div class="panel"><h3>Resolución numérica</h3><div class="sol"><div class="steps">${e.steps.map(s=>`<div class="${s[0]}">${s[1]}</div>`).join('')}</div></div>
+   <div class="cover" hidden>Solución oculta.<br>Resolvelo en la carpeta y después mostrala.</div>
+   <div class="stepctl sol"><button class="stp">Paso a paso</button><button class="all">Ver todo</button></div></div>
+ </div>
+ <div class="stepctl show1" hidden><button class="reveal">Mostrar la solución de este ejercicio</button></div>
+</article>`).join('');
+
+EX.forEach((e,i)=>{const el=$('#ex'+i),q=el.querySelector('svg.q'),s=el.querySelector('svg.s'),rows=[...el.querySelectorAll('.steps div')];
+  q.innerHTML=`<g class="new">${FIG[i](false)}</g>`;
+  const drawS=()=>{s.innerHTML='';requestAnimationFrame(()=>s.innerHTML=`<g class="new">${FIG[i](true)}</g>`)};drawS();
+  el.querySelector('.rep').onclick=drawS;
+  let k=-1;
+  el.querySelector('.stp').onclick=()=>{if(k<0||k>=rows.length-1){k=0}else k++;rows.forEach((r,j)=>r.classList.toggle('dim',j>k));
+    el.querySelector('.stp').textContent=k>=rows.length-1?'Empezar de nuevo':'Siguiente paso ▸';if(k>=rows.length-1)drawS()};
+  el.querySelector('.all').onclick=()=>{k=-1;rows.forEach(r=>r.classList.remove('dim'));el.querySelector('.stp').textContent='Paso a paso'};
+  el.querySelector('.reveal').onclick=()=>{setHidden(el,false);drawS()};
+});
+function setHidden(el,h){el.querySelectorAll('.sol').forEach(x=>x.hidden=h);el.querySelectorAll('.cover').forEach(x=>x.hidden=!h);el.querySelector('.show1').hidden=!h}
+let practice=false;
+$('#practice').onclick=()=>{practice=!practice;$('#practice').classList.toggle('on',practice);
+  $('#practice').textContent=practice?'Mostrar todas las soluciones':'Modo práctica: ocultar soluciones';
+  document.querySelectorAll('.ex').forEach(el=>setHidden(el,practice));
+  if(!practice)document.querySelectorAll('.ex .rep').forEach(b=>b.click())};
+</script>
+
+</body>
+</html>
